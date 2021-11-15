@@ -20,9 +20,9 @@ class KeywordClass
   attr_accessor :one
   attr_accessor :two
 
-  def initialize(**init)
-    @one = init[:one]
-    @two = init[:two]
+  def initialize(one:, two:)
+    @one = one
+    @two = two
   end
 end
 
