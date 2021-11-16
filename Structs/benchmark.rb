@@ -4,7 +4,9 @@ require 'pry'
 # gem install benchmark-ips
 
 BasicStruct = Struct.new(:one, :two)
+BasicLargeStruct = Struct.new(:one, :two, :three, :four, :five)
 KeywordStruct = Struct.new(:one, :two, keyword_init: true)
+KeywordLargeStruct = Struct.new(:one, :two, :three, :four, :five, keyword_init: true)
 
 class BasicClass
   attr_accessor :one
@@ -13,6 +15,18 @@ class BasicClass
   def initialize(one, two)
     @one = one
     @two = two
+  end
+end
+
+class BasicLargeClass
+  attr_accessor :one, :two, :three, :four, :five
+
+  def initialize(one, two, three, four, five)
+    @one = one
+    @two = two
+    @three = three
+    @four = four
+    @five = five
   end
 end
 
@@ -26,6 +40,18 @@ class KeywordClass
   end
 end
 
+class KeywordLargeClass
+  attr_accessor :one, :two, :three, :four, :five
+
+  def initialize(one:, two: nil, three: nil, four: nil, five: nil)
+    @one = one
+    @two = two
+    @three = three
+    @four = four
+    @five = five
+  end
+end
+
 Benchmark.ips do |x|
   x.report('BasicStruct Init') do
     BasicStruct.new(:one, :two)
@@ -35,12 +61,32 @@ Benchmark.ips do |x|
     KeywordStruct.new(one: :one, two: :two)
   end
 
+  x.report('BasicLargeStruct Init') do
+    BasicLargeStruct.new(:one, :two, :three, :four, :five)
+  end
+
+  x.report('KeywordLargeStruct Init') do
+    KeywordLargeStruct.new(one: :one, two: :two, three: :three, four: :four, five: :five)
+  end
+
   x.report('BasicClass Init') do
     BasicClass.new(:one, :two)
   end
 
   x.report('KeywordClass Init') do
     KeywordClass.new(one: :one, two: :two)
+  end
+
+  x.report('BasicLargeClass Init') do
+    BasicLargeClass.new(:one, :two, :three, :four, :five)
+  end
+
+  x.report('KeywordLargeClass Init') do
+    KeywordLargeClass.new(one: :one, two: :two, three: :three, four: :four, five: :five)
+  end
+
+  x.report('KeywordLargeClass Init Limited') do
+    KeywordLargeClass.new(one: :one)
   end
 
   x.compare!
