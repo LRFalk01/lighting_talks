@@ -6,7 +6,6 @@ require_relative './time_filter_4'
 
 require 'benchmark/ips'
 require 'date'
-require 'pry'
 # gem install benchmark-ips
 
 
@@ -15,25 +14,25 @@ Benchmark.ips do |x|
   SlowRuby::Data.data
 
   now = DateTime.now.to_date
-  time_filter_1 = SlowRuby::TimeFilter1.new(now.next_day(30), now.next_day(45)).to_proc
-  time_filter_2 = SlowRuby::TimeFilter2.new(now.next_day(30), now.next_day(45)).to_proc
-  time_filter_3 = SlowRuby::TimeFilter3.new(now.next_day(30), now.next_day(45)).to_proc
-  time_filter_4 = SlowRuby::TimeFilter4.new(now.next_day(30), now.next_day(45)).to_proc
+  time_filter1 = SlowRuby::TimeFilter1.new(now.next_day(30), now.next_day(45)).to_proc
+  time_filter2 = SlowRuby::TimeFilter2.new(now.next_day(30), now.next_day(45)).to_proc
+  time_filter3 = SlowRuby::TimeFilter3.new(now.next_day(30), now.next_day(45)).to_proc
+  time_filter4 = SlowRuby::TimeFilter4.new(now.next_day(30), now.next_day(45)).to_proc
 
   x.report('TimeFilter1') do
-    SlowRuby::Data.data.filter { |x| time_filter_1.call(x) }.size
+    SlowRuby::Data.data.filter { |x| time_filter1.call(x) }.size
   end
 
   x.report('TimeFilter2') do
-    SlowRuby::Data.data.filter { |x| time_filter_2.call(x) }.size
+    SlowRuby::Data.data.filter { |x| time_filter2.call(x) }.size
   end
 
   x.report('TimeFilter3') do
-    SlowRuby::Data.data.filter { |x| time_filter_3.call(x) }.size
+    SlowRuby::Data.data.filter { |x| time_filter3.call(x) }.size
   end
 
   x.report('TimeFilter4') do
-    SlowRuby::Data.data.filter { |x| time_filter_4.call(x) }.size
+    SlowRuby::Data.data.filter { |x| time_filter4.call(x) }.size
   end
 
   x.compare!
