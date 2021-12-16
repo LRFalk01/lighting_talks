@@ -12,7 +12,9 @@ module One
     end
 
     def get
-      @item
+      1_000_000.times do
+        next @item
+      end
     end
   end
 end
@@ -26,28 +28,23 @@ module Two
     end
 
     def get
-      item
+      1_000_000.times do
+        next item
+      end
     end
   end
 end
-
-
-n = 1_000_000
 
 Benchmark.ips do |benchmark|
   one = ::One::DTO.new(1)
   two = ::Two::DTO.new(2)
 
   benchmark.report("ivar") do
-    (1..n).each do
-      one.get
-    end
+    one.get
   end
 
   benchmark.report("attr") do
-    (1..n).each do
-      two.get
-    end
+    two.get
   end
 
   benchmark.compare!
@@ -55,12 +52,14 @@ end
 
 
 # Warming up --------------------------------------
-# ivar     1.000  i/100ms
-# attr     1.000  i/100ms
+# ivar     3.000  i/100ms
+# attr     2.000  i/100ms
 # Calculating -------------------------------------
-# ivar     19.265  (± 5.2%) i/s -     97.000  in   5.042461s
-# attr     15.795  (± 6.3%) i/s -     79.000  in   5.020245s
+# ivar     30.312  (± 3.3%) i/s -    153.000  in   5.056710s
+# attr     23.813  (± 4.2%) i/s -    120.000  in   5.057554s
 #
 # Comparison:
-#   ivar:       19.3 i/s
-# attr:       15.8 i/s - 1.22x  (± 0.00) slower
+#   ivar:       30.3 i/s
+# attr:       23.8 i/s - 1.27x  (± 0.00) slower
+#
+# ~6 vs ~8 nanoseconds
